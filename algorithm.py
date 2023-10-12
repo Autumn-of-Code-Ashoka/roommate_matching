@@ -33,44 +33,52 @@ for i in candidates:
     
 print(distances)
 
-def stable_roommates(preferences):
-    # Initialize the roommates dictionary.
-    roommates = {}
-    for person in preferences:
-        roommates[person] = None
+def irving(roommates_dict):
+    person_list = list(roommates_dict.keys())
+    n = len(person_list)
 
-    # Start the proposal process.
-    proposers = list(preferences.keys())
-    while proposers:
-        proposer = proposers.pop()
-        proposee = preferences[proposer][0]
+    def get_rankings(prefs):
+        return {prefs[i]: i for i in range(len(prefs))}
 
-    # If the proposee is not already paired up, then accept the proposal.
-    if roommates[proposee] is None:
-        roommates[proposer] = proposee
-        roommates[proposee] = proposer
-    else:
-        # If the proposee is already paired up, then reject the proposal if they
-        # prefer the proposer over their current roommate.
-        if preferences[proposee][preferences[proposee].index(proposer)] < preferences[proposee][preferences[proposee].index(roommates[proposee])]:
-            roommates[proposer] = proposee
-            roommates[roommates[proposee]] = None
-            proposers.append(roommates[proposee])
+    roommates = [[person_list.index(neighbor) for neighbor in roommates_dict[person]] for person in person_list]
 
-    # If anyone is not paired up, pair them up with the person who rejected
-    # them last.
-    for person in roommates:
-        if roommates[person] is None:
-            rejected_by = preferences[person][-1]
-            roommates[person] = rejected_by
-            roommates[rejected_by] = person
+    proposals = [-1] * n  # Keeps track of the proposals each person has made
+    rank = {}  # Keeps track of the rank of each roommate for each person
 
-    # Return the roommates dictionary.
-    return roommates
+    for i in range(n):
+        rank[i] = get_rankings(roommates[i])
 
-matching = stable_roommates(distances)
+    matched = set()  # Keep track of matched individuals
+    stable_matching = []
+
+    for proposer in range(n):
+        if proposer not in matched:
+            recipient = -1
+
+            for roommate in roommates[proposer]:
+                if proposals[roommate] == -1:
+                    recipient = roommate
+                    break
+                else:
+                    current_suitor = proposals[roommate]
+                    if current_suitor not in matched:  # Check if the suitor is in matched
+                        matched.remove(current_suitor)
+                        matched.add(proposer)
+                        proposals[roommate] = proposer
+                        recipient = roommate
+
+            if recipient != -1:
+                matched.add(proposer)
+                matched.add(recipient)
+                proposals[recipient] = proposer
+                proposals[proposer] = recipient
+                stable_matching.append((person_list[proposer], person_list[recipient]))
+
+    return stable_matching
+
+matching = irving(distances)
 
 print(matching)
-matching = {opt1:matching[opt1] for opt1 in matching}
+matching = {i:pair for i,pair in enumerate(matching)}
 with open(rel+'matches.json','w') as json_file:
     json.dump(matching,json_file)
