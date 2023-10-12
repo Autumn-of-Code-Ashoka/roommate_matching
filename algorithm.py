@@ -1,7 +1,6 @@
 import csv
 import numpy as np
 import json
-import networkx as nx
 
 # change as per form options
 options = {0: ['Friend', 'Partner', 'Parents', 'Pet', 'Myself'],
@@ -34,17 +33,44 @@ for i in candidates:
     
 print(distances)
 
+def stable_roommates(preferences):
+    # Initialize the roommates dictionary.
+    roommates = {}
+    for person in preferences:
+        roommates[person] = None
 
+    # Start the proposal process.
+    proposers = list(preferences.keys())
+    while proposers:
+        proposer = proposers.pop()
+        proposee = preferences[proposer][0]
 
-# create a minimum weighted graph with the distances corresponding to each node
-G = nx.Graph()
-for person, preferences in distances.items():
-  for other_person in preferences:
-    G.add_edge(person, other_person, weight=preferences.index(other_person))
+    # If the proposee is not already paired up, then accept the proposal.
+    if roommates[proposee] is None:
+        roommates[proposer] = proposee
+        roommates[proposee] = proposer
+    else:
+        # If the proposee is already paired up, then reject the proposal if they
+        # prefer the proposer over their current roommate.
+        if preferences[proposee][preferences[proposee].index(proposer)] < preferences[proposee][preferences[proposee].index(roommates[proposee])]:
+            roommates[proposer] = proposee
+            roommates[roommates[proposee]] = None
+            proposers.append(roommates[proposee])
 
-matching = nx.min_weight_matching(G)
+    # If anyone is not paired up, pair them up with the person who rejected
+    # them last.
+    for person in roommates:
+        if roommates[person] is None:
+            rejected_by = preferences[person][-1]
+            roommates[person] = rejected_by
+            roommates[rejected_by] = person
+
+    # Return the roommates dictionary.
+    return roommates
+
+matching = stable_roommates(distances)
 
 print(matching)
-matching = {i:pair for i,pair in enumerate(matching)}
+matching = {opt1:matching[opt1] for opt1 in matching}
 with open(rel+'matches.json','w') as json_file:
-   json.dump(matching,json_file)
+    json.dump(matching,json_file)
