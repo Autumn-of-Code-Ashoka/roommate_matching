@@ -79,6 +79,8 @@ def irving(roommates_dict):
 matching = irving(distances)
 
 print(matching)
-matching = {i:pair for i,pair in enumerate(matching)}
+matching = {i+1:pair for i,pair in enumerate(matching)}
 with open(rel+'matches.json','w') as json_file:
     json.dump(matching,json_file)
+with open(rel+'preferences.json','w') as json_file:
+    json.dump(distances,json_file)
