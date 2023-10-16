@@ -3,24 +3,24 @@ import numpy as np
 import json
 
 # change as per form options
-options = {0: ['Friend', 'Partner', 'Parents', 'Pet', 'Myself'],
- 1: ['I like reading poems', 'I like listening to lyrical poems and ghazals', 'I attend recitals or open-mics or live performances', 'I enjoy watching videos'],
- 2: ['Radiant Red', 'Ocean Blue', 'Golden Yellow', 'Glossy Green'],
- 3: ['Couplet', 'Free Verse', 'Spoken Word', 'Ghazal'],
- 4: ['Melancholic', 'Reflective', 'Romantic', 'Cheerful']}
+options = {"What time do you usually sleep?": ['8-10', '10-12', '12-2', '2-4', '4-6'],
+ "What time do you usually wake up?": ['6-8', '8-10', '10-12', '12-2'],
+ "Visitor preferences": ['rarely', 'occasionally', 'neutral', 'frequently','always'],
+ "Cleaning habits": ['extremely', 'generally', 'somewhat', 'not']}
 
 # link each name to an n dimensional array
 candidates = {}
-rel = 'matches/'
-with open(rel+'makematch.csv','r') as file:
-    reader = csv.reader(file)
-    header = next(reader)
-    for i,row in enumerate(reader):
-        # change indexes as per csv file
-        candidates[row[2]+':'+row[1]] = list(map(lambda s: options[row.index(s) - 3].index(s),row[3:8]))
+rel1 = '../webapp/data/'
+
+with open(rel1+'preferences.json','r') as json_file:
+    data = json.load(json_file)
+    for candidate in data:
+        candidates[candidate["name"] + ':' + candidate["email"]] = list(map(lambda s: options[s].index(candidate[s]), list(candidate.keys())[2:]))
 print(candidates)
 
-# TODO: add code here to partition the data set based on genders
+
+# TODO: add code here to partition the data set based on sex
+
 
 # calculate the distance between polar coordinates
 def calculate_distance(p1,p2):
@@ -81,6 +81,7 @@ def irving(roommates_dict):
 matching = irving(distances)
 
 print(matching)
+rel = 'matches/'
 matching = {i+1:pair for i,pair in enumerate(matching)}
 with open(rel+'matches.json','w') as json_file:
     json.dump(matching,json_file)
