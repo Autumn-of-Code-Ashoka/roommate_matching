@@ -5,7 +5,15 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, install all dependencies:
+To get started on the web-app,
+
+First, change directory to webapp:
+
+```bash
+cd ./webapp
+```
+
+Then, install all dependencies:
 
 ```bash
 npm i
@@ -17,7 +25,7 @@ pnpm i
 bun i
 ```
 
-Then, run the development server:
+Finally, run the development server:
 
 ```bash
 npm run dev
