@@ -50,7 +50,7 @@ To get started on the matching algorithm,
 First, change directory to matching_algorithm:
 
 ```bash
-cd ../matching_algorithm
+cd ./matching_algorithm
 ```
 
 Run `algorithm.py` to generate the roommmate matches.
