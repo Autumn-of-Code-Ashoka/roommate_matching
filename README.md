@@ -25,6 +25,8 @@ pnpm i
 bun i
 ```
 
+Then, rename `preferences.json.example` to `preferences.json`.
+
 Finally, run the development server:
 
 ```bash
