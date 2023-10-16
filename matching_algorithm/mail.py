@@ -2,7 +2,7 @@ import json
 import smtplib, ssl
 
 def mail(pair_data):
-    ## modify this code to send the 
+    # modify this code to email the matches!
     port = 465  # For SSL
     smtp_server = "smtp.gmail.com"
     sender_email = "my@gmail.com"  # Enter your address

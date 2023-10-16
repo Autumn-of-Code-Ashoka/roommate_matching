@@ -20,6 +20,8 @@ with open(rel+'makematch.csv','r') as file:
         candidates[row[2]+':'+row[1]] = list(map(lambda s: options[row.index(s) - 3].index(s),row[3:8]))
 print(candidates)
 
+# TODO: add code here to partition the data set based on genders
+
 # calculate the distance between polar coordinates
 def calculate_distance(p1,p2):
     return np.linalg.norm(np.array(p1) - np.array(p2))
