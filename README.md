@@ -47,7 +47,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 ## Matching Algorithm
 
-To get started on the matching algorithm,
+To build on the matching algorithm,
 
 First, change directory to matching_algorithm:
 
