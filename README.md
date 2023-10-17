@@ -59,6 +59,8 @@ Run `algorithm.py` to generate the roommmate matches.
 
 Open `mail.py` to process these matches from `matches.json` and email the results.
 
+[Irving's Matching Algorithm](https://en.wikipedia.org/wiki/Stable_roommates_problem) - learn more about the implementation
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
